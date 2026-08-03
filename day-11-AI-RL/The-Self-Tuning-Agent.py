@@ -1,0 +1,106 @@
+# The Self-Tuning Agent
+
+# Tool: Colab or VS Code + OpenAI key     
+
+# Problem Statement: Users complain an assistant is too wordy. Instead of editing prompts by hand, give the agent a small behaviour state (answer length, temperature) and a rule that adjusts it in response to a signal like “too_long”.
+
+# Goal of the Problem: See adaptive behaviour tuning: the same agent produces measurably different output after a single feedback signal, without you rewriting the prompt.
+
+# Step 1. Define the agent with a tunable behaviour state.
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+from openai import OpenAI
+
+ 
+
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+ 
+
+# The agent's tunable "behaviour state"
+
+state = {"max_words": 60, "temperature": 0.7}
+
+ 
+
+def ask(question, state):
+
+   system = f"Answer in at most {state['max_words']} words."
+
+   resp = client.chat.completions.create(
+
+       model="gpt-4o-mini",
+
+        temperature=state["temperature"],
+
+       messages=[
+
+           {"role": "system", "content": system},
+
+           {"role": "user", "content": question},
+
+       ],
+
+   )
+
+   return resp.choices[0].message.content
+
+# Expected output: nothing yet — you've only defined the function.
+
+# Step 2. Add the adaptation rule and watch the answer shrink.
+
+def adapt(state, feedback):
+
+   if feedback == "too_long":
+
+       state["max_words"] = max(20, state["max_words"] - 20)
+
+   elif feedback == "too_short":
+
+       state["max_words"] += 20
+
+   elif feedback == "too_random":
+
+       state["temperature"] = max(0.0, state["temperature"] - 0.2)
+
+   return state
+
+ 
+
+q = "What is reinforcement learning?"
+
+print("STATE:", state)
+
+print(ask(q, state))
+
+ 
+
+state = adapt(state, "too_long")      # user signal -> agent tunes itself
+
+print("STATE:", state)
+
+print(ask(q, state))
+
+# Expected output
+
+ 
+
+# STATE: {'max_words': 60, 'temperature': 0.7}
+
+# Reinforcement learning is a training approach where an agent learns by
+
+# trial and error, receiving rewards for good actions and penalties for
+
+# bad ones, gradually improving its policy to maximise long-term reward.
+
+ 
+
+# STATE: {'max_words': 40, 'temperature': 0.7}
+
+# Reinforcement learning trains an agent through trial and error: it takes
+
+# actions, receives rewards, and updates its strategy to earn more reward.
+
+# (Second answer is noticeably shorter — the agent adapted.)
