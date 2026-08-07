@@ -2,11 +2,13 @@
 
 # Challenge  •  ~30 minutes
 
-# Problem Statement: A single-shot plan is often shallow. Build an agent that drafts a plan, critiques its own draft for risks and gaps, and then produces an improved plan.
+# Problem Statement: A single-shot plan is often shallow. Build an agent that drafts a plan, critiques its own draft for risks and gaps,
+#  and then produces an improved plan.
 
  
 
-# Goal of the Problem: Implement the Reflection pattern (generate → critique → revise) — one of the core agentic loops. You will feel the quality jump between the draft and the revised plan.
+# Goal of the Problem: Implement the Reflection pattern (generate → critique → revise) — one of the core agentic loops.
+#  You will feel the quality jump between the draft and the revised plan.
 
  
 
@@ -126,4 +128,5 @@ print("IMPROVED PLAN:\n", final)
 
  
 
-# Step 5.  Reflect: you just built a 3-node agent loop by hand. Notice the improved plan is materially better because the agent reviewed its own work — the same idea powers self-correcting agents.
+# Step 5.  Reflect: you just built a 3-node agent loop by hand. 
+# Notice the improved plan is materially better because the agent reviewed its own work — the same idea powers self-correcting agents.

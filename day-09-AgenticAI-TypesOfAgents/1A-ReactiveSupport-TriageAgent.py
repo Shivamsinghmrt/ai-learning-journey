@@ -2,7 +2,8 @@
 
 # Environment: Google Colab (pure Python)    Est. time: 5 min
 
-# Problem Statement:  Build a reactive agent that instantly routes an incoming customer message to the right support queue using simple condition→action rules — no memory, no planning.
+# Problem Statement:  Build a reactive agent that instantly routes an incoming customer message to the
+#  right support queue using simple condition→action rules — no memory, no planning.
 
 # Goal of the Problem:  Feel the reactive paradigm (perception → immediate action) and discover where it breaks down.
 

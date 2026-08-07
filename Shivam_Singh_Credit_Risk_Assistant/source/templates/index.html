@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Credit Risk Assistant</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f7fb; color: #1f2937; margin: 0; padding: 2rem; }
+    .card { max-width: 1000px; margin: auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; margin-top: 0.6rem; font-weight: bold; }
+    input, select { width: 100%; padding: 0.7rem; margin-top: 0.3rem; border-radius: 8px; border: 1px solid #d1d5db; }
+    button { margin-top: 1rem; padding: 0.75rem 1rem; border: none; background: #2563eb; color: white; border-radius: 8px; cursor: pointer; }
+    .result { margin-top: 1rem; background: #f8fafc; padding: 1rem; border-radius: 8px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>AI Credit Risk & Loan Underwriting Assistant</h1>
+    <p>Enter applicant details, simulate a what-if scenario, and generate an explainable recommendation.</p>
+
+    <div class="grid">
+      <div>
+        <label>Name</label>
+        <input id="name" value="Asha Patel" />
+
+        <label>Annual Income</label>
+        <input id="income" value="90000" />
+
+        <label>Existing Debt</label>
+        <input id="existing_debt" value="18000" />
+
+        <label>Requested Loan Amount</label>
+        <input id="loan_amount" value="25000" />
+
+        <label>Credit Score</label>
+        <input id="credit_score" value="720" />
+
+        <label>Employment Status</label>
+        <select id="employment_status">
+          <option value="employed">Employed</option>
+          <option value="self_employed">Self-employed</option>
+          <option value="contract">Contract</option>
+        </select>
+      </div>
+      <div>
+        <label>Loan Purpose</label>
+        <input id="loan_purpose" value="Home improvement" />
+
+        <label>What-if Income</label>
+        <input id="scenario_income" value="95000" />
+
+        <label>What-if Debt</label>
+        <input id="scenario_debt" value="15000" />
+
+        <label>What-if Loan Amount</label>
+        <input id="scenario_loan" value="20000" />
+
+        <label>Protected Attributes (optional)</label>
+        <input id="age" value="" />
+        <input id="gender" value="" />
+      </div>
+    </div>
+
+    <button onclick="submitAssessment()">Generate Assessment</button>
+    <div id="result" class="result">Waiting for input...</div>
+  </div>
+
+  <script>
+    async function submitAssessment() {
+      const profile = {
+        name: document.getElementById('name').value,
+        income: Number(document.getElementById('income').value),
+        existing_debt: Number(document.getElementById('existing_debt').value),
+        loan_amount: Number(document.getElementById('loan_amount').value),
+        credit_score: Number(document.getElementById('credit_score').value),
+        employment_status: document.getElementById('employment_status').value,
+        loan_purpose: document.getElementById('loan_purpose').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value
+      };
+
+      const scenario = {
+  income: document.getElementById('scenario_income').value !== "" 
+            ? Number(document.getElementById('scenario_income').value) 
+            : undefined,
+  existing_debt: document.getElementById('scenario_debt').value !== "" 
+            ? Number(document.getElementById('scenario_debt').value) 
+            : undefined,
+  loan_amount: document.getElementById('scenario_loan').value !== "" 
+            ? Number(document.getElementById('scenario_loan').value) 
+            : undefined
+};
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = 'Generating assessment...';
+
+      try {
+        const response = await fetch('/assess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile, scenario })
+        });
+
+        const data = await response.json();
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultDiv.textContent = 'Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>

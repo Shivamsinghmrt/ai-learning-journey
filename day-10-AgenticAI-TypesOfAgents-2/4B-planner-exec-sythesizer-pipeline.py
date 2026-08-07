@@ -2,7 +2,8 @@
 
 # Environment: Google Colab (Python + OpenAI)     Est. time: 20 min
 
-# Problem Statement:  A Planner decomposes a goal into subtasks, an Executor completes each subtask in order (passing results forward), and a Synthesizer assembles the final deliverable.
+# Problem Statement:  A Planner decomposes a goal into subtasks, an Executor completes each subtask in order (passing results forward), 
+# and a Synthesizer assembles the final deliverable.
 
 # Goal of the Problem:  Implement hierarchical planning and watch intermediate state flow from one subtask to the next.
 
